@@ -1,2 +1,2 @@
 # Archaeopteryx
-first ajou univ project
+first ajou univ web game project
