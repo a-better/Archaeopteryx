@@ -3,4 +3,4 @@ first ajou univ web game project
 
 - acade game
 - log 
-- ddd
+- infra is aws
