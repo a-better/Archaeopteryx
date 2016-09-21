@@ -34,11 +34,12 @@ var init = function () {
 	var game = new Phaser.Game(width, height, Phaser.AUTO, 'test', null, false, true);
 		
 	var BasicGame = function (game) { };
-
 	BasicGame.Boot = function (game) { };
+	
 
 	BasicGame.Boot.prototype =
 	{
+		
 	    preload: function () {
 	        game.load.image('cactus1', 'images/tiles/obstacle1.png');
 	        game.load.image('cactus2', 'images/tiles/obstacle2.png');
@@ -411,7 +412,22 @@ var init = function () {
 	        // enable physics on the player
 	        game.physics.isoArcade.enable(player);
 	        player.body.collideWorldBounds = true;
+	                // Set up our controls.
+        this.cursors = game.input.keyboard.createCursorKeys();
 
+        this.game.input.keyboard.addKeyCapture([
+            Phaser.Keyboard.LEFT,
+            Phaser.Keyboard.RIGHT,
+            Phaser.Keyboard.UP,
+            Phaser.Keyboard.DOWN,
+            Phaser.Keyboard.SPACEBAR
+        ]);
+
+        var space = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+
+        space.onDown.add(function () {
+            player.body.velocity.z = 300;
+        }, this);
 	        game.camera.follow(player);
 	    },
 	    update: function () {
@@ -464,7 +480,25 @@ var init = function () {
 	        	player.body.velocity.x = 0;
 	        	player.body.velocity.y = 0;
 	        }
-	        
+	                if (this.cursors.up.isDown) {
+            player.body.velocity.y = -speed;
+        }
+        else if (this.cursors.down.isDown) {
+            player.body.velocity.y = speed;
+        }
+        else {
+            player.body.velocity.y = 0;
+        }
+
+        if (this.cursors.left.isDown) {
+            player.body.velocity.x = -speed;
+        }
+        else if (this.cursors.right.isDown) {
+            player.body.velocity.x = speed;
+        }
+        else {
+            player.body.velocity.x = 0;
+        }
 	        
 	        if (Ndown == true) {
 	        	player.animations.play('N');
@@ -558,8 +592,9 @@ var init = function () {
 	      
 	    }
 	};
+	var childGameBoot = new BasicGame.Boot();
 
-	game.state.add('Boot', BasicGame.Boot);
+	game.state.add('Boot', childGameBoot);
 	game.state.start('Boot');
 	
 	// add the collected item
