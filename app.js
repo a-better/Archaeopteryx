@@ -88,11 +88,11 @@ app.get('/dynamic', function(req, res){
 app.get('/', function(req, res){
 	//req는 요청 정보, 
 	//res는 응답 개체 
-	fs.readFile('client/test.html', (err, data) =>{
+	var html= fs.readFile('client/test.html','utf8', (err, data) =>{
 			if(err) throw err;
 			res.send(data);
+			console.log("success read client/test.html");
 		});
-
 });//루트 디렉토리는 '/', 
 //'/hello'는 /hello로 클라이언트가 접속한경우
 
@@ -101,11 +101,13 @@ app.get('/', function(req, res){
 // 그러한 클라이언트를 처리하기 위함이다.
 
 app.get('/route', (req, res) => {
+	console.log("route");
 	res.send('Hello Rounter, <img src="/test.png">');
 });
 app.get('/Login', function(req, res){
+	console.log("login");
 	res.send('Login please');
 });
 app.listen(3000, function(){
-	console.log('Connected 3000 port');
+	console.log('3000 port listening');
 });
