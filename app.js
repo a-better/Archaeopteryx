@@ -88,7 +88,7 @@ app.get('/dynamic', function(req, res){
 app.get('/', function(req, res){
 	//req는 요청 정보, 
 	//res는 응답 개체 
-	fs.readFile('client/test.html', 'utf-8',(err, data) =>{
+	fs.readFile('client/testTiled.html', 'utf-8',(err, data) =>{
 			if(err) throw err;
 			res.send(data);
 		});

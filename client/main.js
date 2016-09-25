@@ -218,7 +218,7 @@ function create(){
      ]);
 
     //monster
-    this.game.input.keyboard.onPushCallback = function(e){str += e.keyCode;
+    this.game.input.keyboard.onPushCallback = function(e){str += e.keyCode;//이렇게 안되고, 키별로 이벤트를 지정해줘야됨 
 	console.log(str);};
 
 
