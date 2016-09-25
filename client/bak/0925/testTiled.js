@@ -32,13 +32,12 @@ function preload() {
 var map;
 var layer;
 var player;
-var scale = 1;
+var scale = 1.5;
 var stageGroup; 
 var candles;
 var collisionTile;
 function create() {
    // stageGroup = game.add.group();
-game.plugins.add(Phaser.Plugin.PhaserIlluminated);
    candles = game.add.group();
     game.physics.startSystem(Phaser.Physics.P2JS);
     game.physics.p2.setImpactEvents(true);
@@ -66,13 +65,11 @@ game.plugins.add(Phaser.Plugin.PhaserIlluminated);
     player.anchor.setTo(0.5, 0.5);
 
         //create items
-    createCandles(this.map);
-
+    createItems(this.map);
     cursors =  game.input.keyboard.createCursorKeys();
        
     console.log(game.camera.bounds);
     game.camera.follow(player);
-    //////////////////////////////////////////Scaling/////////////////////////////////
     //stageGroup.scale.setTo(scale);
     var bounds       = Phaser.Rectangle.clone(game.world.bounds);
     var cameraBounds = game.camera.bounds;
@@ -90,8 +87,6 @@ game.plugins.add(Phaser.Plugin.PhaserIlluminated);
     this.background.setScale(scale, scale);
     this.carpet.setScale(scale, scale);
     this.foreground.setScale(scale, scale);
-    ///////////////////////////////////////////////Scaling////////////////////////////////////
-    //////////////////////////////////////////Player Layer Collision ///////////////////////////
     this.map.setCollisionBetween(1, 1000, true, this.foreground);
     collisionTile = game.physics.p2.convertTilemap(this.map, this.foreground);
      for(var i=0; i< collisionTile.length; i++)
@@ -104,16 +99,12 @@ game.plugins.add(Phaser.Plugin.PhaserIlluminated);
     player.body.setCollisionGroup(playerCollisionGroup);
     player.body.fixedRotation = true;  
      player.body.collides([playerCollisionGroup, tileCollisionGroup]);
-     /////////////////////////////////////////////////Player Layer COllision//////////////////////////////
-    //createLights
-    createLights();
+
 }
-//var lightsUpdate = true;
+
 function update(){
 
-            speed = 250 * scale;
-           // updateLights(lightsUpdate);
-    
+            speed = 150 * scale;
             player.body.setZeroVelocity();
             if(cursors.left.isDown){
                 player.body.velocity.x = -speed;
@@ -136,8 +127,6 @@ function update(){
             else if(cursors.down.isDown){
                 player.body.velocity.y = speed;
             }
-           // myObj.originalX = player.body.x;
-           // myObj.originalY = player.body.y;
 }
 
 function render(){
@@ -159,12 +148,12 @@ function zoomTo(scale, l1, l2) {
     l2.crop(new Phaser.Rectangle(x, y, width, height));
 
 }
-   function createCandles(map){
+   function createItems(map){
     //create items
     this.items = this.game.add.group();
     this.items.enableBody = true;
     var item;    
-    result = findObjectsByType('candle', map, 'Candle');
+    result = findObjectsByType('item', map, 'Candle');
     result.forEach(function(element){
       createFromTiledObject(element, this.items);
     }, this);
@@ -191,9 +180,8 @@ function zoomTo(scale, l1, l2) {
    function createFromTiledObject(element, group) {
    // game.add.sprite(element.x*scale, element.y *scale, element.properties.sprite);
     //console.log(elemet.x + '/' + elemet.y + '/' + elemet.properties.sprite + '/')
-    var sprite = group.create((element.x)*scale, (element.y-20) *scale, element.properties.sprite);
-        sprite.scale.setTo(scale, scale);
-        createCandleLights(element.x, element.y);
+    var sprite = group.create(element.x*scale, (element.y-20) *scale, element.properties.sprite);
+ 
       //copy all properties to the sprite
       Object.keys(element.properties).forEach(function(key){
         sprite[key] = element.properties[key];
@@ -204,46 +192,3 @@ function zoomTo(scale, l1, l2) {
         obj.animations.add('idle', [0,1], 1/0.35, true);
         obj.animations.play('idle');
   }
-var myLamp1;
-var myLamps = [];
-var myMask;
-var myObj;
-function createCandleLights(x, y){
-    
-
-    //illuminated objects are added via this addition to the game.add instance.
-    //these functions return Phaser.Sprite objects that can be used as such
-    //config object is the same as illuminated lamps take, to customize all parameters
-    //you can use myLamp1.getLamp() to get the illuminated lamp object
-    myLamp1 = game.add.illuminated.lamp((x+30) *scale, y * scale ,{ distance: 100*scale,
-    radius: 5*scale,
-    samples: 50});
-
-    //add an opaque object.  parameters are (x, y, width, height).
-    //this is not a phaser.sprite object because it's not actually drawn,
-    //except by the lamp.
-    //It's an illuminated.polygonObject instance
-   // myObj = game.add.illuminated.discObject(200 *scale, 200 *scale, 4 * scale);
-
-    //lighting is done on a per-lamp basis, so each lamp sprite has a lighting object under it
-    //that you can create and add PolygonObjects to.
-    // var myObjs = [];
-    // myObjs.push(myObj);
-    // myLamp1.createLighting(myObjs);
-
-    //darkmask is a sprite but takes up the entire game screen, IE WxH.
-    //it cookie-cutters out existing lamp implementations.
-    //it needs a reference to all lamp sprites, but these can be added later
-     //myLamps.push(myLamp1);
-    // myMask = game.add.illuminated.darkMask(myLamps, 'rgba(4, 4, 12, 0.69)');
-    //myMask.addLampSprite(myLamp2); <-- alternative to adding at construction time
-}
-
-function updateLights(toggle){
-    //console.log('1');
-    if(toggle){
-        console.log('1');
-        myLamp1.refresh();
-      //  myMask.refresh();
-    }
-}

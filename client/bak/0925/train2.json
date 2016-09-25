@@ -52,7 +52,7 @@
                      "sprite":"string"
                     },
                  "rotation":0,
-                 "type":"candle",
+                 "type":"item",
                  "visible":true,
                  "width":64,
                  "x":130,
@@ -72,7 +72,7 @@
                      "sprite":"string"
                     },
                  "rotation":0,
-                 "type":"candle",
+                 "type":"item",
                  "visible":true,
                  "width":64,
                  "x":290,
@@ -92,7 +92,7 @@
                      "sprite":"string"
                     },
                  "rotation":0,
-                 "type":"candle",
+                 "type":"item",
                  "visible":true,
                  "width":64,
                  "x":450,
@@ -112,7 +112,7 @@
                      "sprite":"string"
                     },
                  "rotation":0,
-                 "type":"candle",
+                 "type":"item",
                  "visible":true,
                  "width":64,
                  "x":610,
@@ -132,7 +132,7 @@
                      "sprite":"string"
                     },
                  "rotation":0,
-                 "type":"candle",
+                 "type":"item",
                  "visible":true,
                  "width":64,
                  "x":770,
@@ -152,7 +152,7 @@
                      "sprite":"string"
                     },
                  "rotation":0,
-                 "type":"candle",
+                 "type":"item",
                  "visible":true,
                  "width":64,
                  "x":930,
@@ -172,7 +172,7 @@
                      "sprite":"string"
                     },
                  "rotation":0,
-                 "type":"candle",
+                 "type":"item",
                  "visible":true,
                  "width":64,
                  "x":1090,
