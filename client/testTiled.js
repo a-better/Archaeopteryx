@@ -32,17 +32,18 @@ function preload() {
 var map;
 var layer;
 var player;
-var scale = 1;
+var scale = 1.8;
 var stageGroup; 
 var candles;
 var collisionTile;
+ var playerCollisionGroup;
+  var tileCollisionGroup ;
 function create() {
    // stageGroup = game.add.group();
 game.plugins.add(Phaser.Plugin.PhaserIlluminated);
    candles = game.add.group();
-    game.physics.startSystem(Phaser.Physics.P2JS);
-    game.physics.p2.setImpactEvents(true);
-    game.physics.p2.restitution = 0.8;
+    game.physics.startSystem(Phaser.Physics.ARCADE);
+   
     game.stage.backgroundColor = '#000000';
     this.map = this.game.add.tilemap('train');
     this.map.addTilesetImage('carpet', 'trainSprites');
@@ -60,18 +61,22 @@ game.plugins.add(Phaser.Plugin.PhaserIlluminated);
 
    
 
-    var playerCollisionGroup = game.physics.p2.createCollisionGroup();
-    var tileCollisionGroup = game.physics.p2.createCollisionGroup();
+    playerCollisionGroup = game.add.group();
+    playerCollisionGroup.enableBody = true;
+    playerCollisionGroup.physicsBodyType = Phaser.Physics.ARCADE;
+    tileCollisionGroup = game.add.group();
+    tileCollisionGroup.enableBody = true;
+    tileCollisionGroup.physicsBodyType = Phaser.Physics.ARCADE;
     player = game.add.sprite(500*scale, 500*scale, 'frog');
     player.anchor.setTo(0.5, 0.5);
+    player.scale.setTo(scale, scale);
 
         //create items
     createCandles(this.map);
 
     cursors =  game.input.keyboard.createCursorKeys();
-       
+     game.camera.follow(player);   
     console.log(game.camera.bounds);
-    game.camera.follow(player);
     //////////////////////////////////////////Scaling/////////////////////////////////
     //stageGroup.scale.setTo(scale);
     var bounds       = Phaser.Rectangle.clone(game.world.bounds);
@@ -86,38 +91,62 @@ game.plugins.add(Phaser.Plugin.PhaserIlluminated);
     cameraBounds.width  = bounds.width  * scale;
     cameraBounds.height = bounds.height * scale;
 
-    player.scale.setTo(scale, scale);
+
     this.background.setScale(scale, scale);
     this.carpet.setScale(scale, scale);
     this.foreground.setScale(scale, scale);
     ///////////////////////////////////////////////Scaling////////////////////////////////////
-    //////////////////////////////////////////Player Layer Collision ///////////////////////////
-    this.map.setCollisionBetween(1, 1000, true, this.foreground);
-    collisionTile = game.physics.p2.convertTilemap(this.map, this.foreground);
-     for(var i=0; i< collisionTile.length; i++)
+
+    ////Physics Performance Test////////////
+     var obj;
+     for(var i=0; i<100; i++)
      {
 
-            collisionTile[i].setCollisionGroup(tileCollisionGroup);
-            collisionTile[i].collides([tileCollisionGroup,playerCollisionGroup])
+        obj = game.add.sprite(game.world.randomX*scale, game.world.randomY*scale, 'frog');
+        game.physics.arcade.enable(obj);
+         obj.body.bounce.set(0.5);
+         tileCollisionGroup.add(obj);
+       // obj.body.setRectangle(30, 30);
+        //obj.body.setCollisionGroup(tileCollisionGroup);
+       // obj.body.collides([tileCollisionGroup, playerCollisionGroup]);
+    }
+    ////Physics Performance Test////////////
+
+    //////////////////////////////////////////Player Layer Collision ///////////////////////////
+    this.map.setCollisionBetween(1, 1000, true, this.foreground);
+   // collisionTile = game.physics.arcade.convertTilemap(this.map, this.foreground);
+     //for(var i=0; i< collisionTile.length; i++)
+     {
+
+           // collisionTile[i].setCollisionGroup(tileCollisionGroup);
+          // tileCollisionGroup.add(obj);
+            //collisionTile[i].collides([tileCollisionGroup,playerCollisionGroup])
      } 
-    game.physics.p2.enable(player);
-    player.body.setCollisionGroup(playerCollisionGroup);
-    player.body.fixedRotation = true;  
-     player.body.collides([playerCollisionGroup, tileCollisionGroup]);
+    game.physics.arcade.enable(player);
+    player.body.bounce.set(0.5);
+   // player.body.setCollisionGroup(playerCollisionGroup);
+    player.body.fixedRotation = true; 
+    playerCollisionGroup.add(player); 
+  // player.body.collides([playerCollisionGroup, tileCollisionGroup]);
+    
+
+
      /////////////////////////////////////////////////Player Layer COllision//////////////////////////////
     //createLights
-    createLight(32*10, 32*12);
-    createLight(32*30, 32*12);
-   createLightedObj();
+   // createLight(32*10, 32*12);
+    //createLight(32*30, 32*12);
+   //createLightedObj();
    createMask();
 }
 //var lightsUpdate = true;
 function update(){
-
+           game.physics.arcade.collide(playerCollisionGroup, tileCollisionGroup);
+           game.physics.arcade.collide(playerCollisionGroup, this.foreground);
+           game.physics.arcade.collide(tileCollisionGroup, this.foreground);
             speed = 250 * scale;
             updateLights();
     
-            player.body.setZeroVelocity();
+            //player.body.setZeroVelocity();
             if(cursors.left.isDown){
                 player.body.velocity.x = -speed;
                 //player.animations.play('left');
@@ -139,8 +168,8 @@ function update(){
             else if(cursors.down.isDown){
                 player.body.velocity.y = speed;
             }
-            myObj.originalX = player.body.x;
-            myObj.originalY = player.body.y;
+           // myObj.originalX = player.body.x;
+           // myObj.originalY = player.body.y;
 }
 
 function render(){
@@ -196,8 +225,8 @@ function zoomTo(scale, l1, l2) {
     //console.log(elemet.x + '/' + elemet.y + '/' + elemet.properties.sprite + '/')
     var sprite = group.create((element.x)*scale, (element.y-20) *scale, element.properties.sprite);
         sprite.scale.setTo(scale, scale);
-        createCandleLights(element.x, element.y);
-        createCandleLights(element.x, element.y+550);
+        //createCandleLights(element.x, element.y);
+        //createCandleLights(element.x, element.y+550);
       //copy all properties to the sprite
       Object.keys(element.properties).forEach(function(key){
         sprite[key] = element.properties[key];
@@ -265,15 +294,15 @@ function createLightedObj(){
 }
 
 function createMask(){
-     myMask = game.add.illuminated.darkMask(myLamps, 'rgba(4, 4, 12, 0.75)');
+    // myMask = game.add.illuminated.darkMask(myLamps, 'rgba(4, 4, 12, 0.75)');
 }
 function updateLights(){
     //console.log('1');
    
     // console.log('1');
-    myLamps.forEach(function(element){
-        element.refresh();
-    });
-    myMask.refresh();
+   // myLamps.forEach(function(element){
+   //     element.refresh();
+   // });
+  //  myMask.refresh();
     
 }
