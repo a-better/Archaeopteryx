@@ -85,15 +85,7 @@ app.get('/dynamic', function(req, res){
 	 `;
 	res.send(output);
 });
-app.get('/', function(req, res){
-	//req는 요청 정보, 
-	//res는 응답 개체 
-	fs.readFile('client/testTiled.html', 'utf-8',(err, data) =>{
-			if(err) throw err;
-			res.send(data);
-		});
 
-});//루트 디렉토리는 '/', 
 //'/hello'는 /hello로 클라이언트가 접속한경우
 
 

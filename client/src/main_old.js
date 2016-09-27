@@ -133,25 +133,24 @@ game.plugins.add(Phaser.Plugin.PhaserIlluminated);
 
      /////////////////////////////////////////////////Player Layer COllision//////////////////////////////
     //createLights
-   // createLight(32*10, 32*12);
-    //createLight(32*30, 32*12);
-   //createLightedObj();
-   createMask();
+  //  createLight(32*10, 32*12);
+  //  createLight(32*30, 32*12);
+  // createLightedObj();
+   ///createMask();
 }
+
+
+var speed = 250 * scale;
 //var lightsUpdate = true;
 function update(){
            game.physics.arcade.collide(playerCollisionGroup, tileCollisionGroup);
            game.physics.arcade.collide(playerCollisionGroup, this.foreground);
            game.physics.arcade.collide(tileCollisionGroup, this.foreground);
-            speed = 250 * scale;
-            updateLights();
-    
+         
             //player.body.setZeroVelocity();
             if(cursors.left.isDown){
                 player.body.velocity.x = -speed;
                 //player.animations.play('left');
-
-
             }
             else if(cursors.right.isDown){
                 player.body.velocity.x = speed;
@@ -169,7 +168,9 @@ function update(){
                 player.body.velocity.y = speed;
             }
            // myObj.originalX = player.body.x;
-           // myObj.originalY = player.body.y;
+            //myObj.originalY = player.body.y;
+          // updateLights();
+
 }
 
 function render(){
@@ -225,8 +226,8 @@ function zoomTo(scale, l1, l2) {
     //console.log(elemet.x + '/' + elemet.y + '/' + elemet.properties.sprite + '/')
     var sprite = group.create((element.x)*scale, (element.y-20) *scale, element.properties.sprite);
         sprite.scale.setTo(scale, scale);
-        //createCandleLights(element.x, element.y);
-        //createCandleLights(element.x, element.y+550);
+      //  createCandleLights(element.x, element.y);
+     //   createCandleLights(element.x, element.y+550);
       //copy all properties to the sprite
       Object.keys(element.properties).forEach(function(key){
         sprite[key] = element.properties[key];
@@ -294,15 +295,15 @@ function createLightedObj(){
 }
 
 function createMask(){
-    // myMask = game.add.illuminated.darkMask(myLamps, 'rgba(4, 4, 12, 0.75)');
+    myMask = game.add.illuminated.darkMask(myLamps, 'rgba(4, 4, 12, 0.75)');
 }
 function updateLights(){
     //console.log('1');
    
     // console.log('1');
-   // myLamps.forEach(function(element){
-   //     element.refresh();
-   // });
-  //  myMask.refresh();
+   myLamps.forEach(function(element){
+       element.refresh();
+   });
+   myMask.refresh();
     
 }
