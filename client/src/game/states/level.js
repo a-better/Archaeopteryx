@@ -19,8 +19,8 @@ Level.prototype = {
   create : function(){
   	level = this;
   	game.physics.startSystem(Phaser.Physics.ARCADE);
-    
-   this.initializeMap();
+
+    this.initializeMap();
   	this.items ={};
   	//this.setEventHandlers();
   	this.initializePlayers();
@@ -29,7 +29,7 @@ Level.prototype = {
     player.body.bounce.set(0.5);
    // player.body.setCollisionGroup(playerCollisionGroup);
     player.body.fixedRotation = true; 
-  	cursors =  game.input.keyboard.createCursorKeys();
+    this.initializationKeyEvent();
   },
 
   update : function(){
@@ -120,8 +120,16 @@ Level.prototype = {
       Object.keys(element.properties).forEach(function(key){
         sprite[key] = element.properties[key];
       });
+  },
+  initializationKeyEvent : function(){
+    cursors =  game.input.keyboard.createCursorKeys();
+    shot = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+    game.input.mouse.capture = true;
+    up = game.input.keyboard.addKey(Phaser.Keyboard.W);
+    down = game.input.keyboard.addKey(Phaser.Keyboard.S);
+    left = game.input.keyboard.addKey(Phaser.Keyboard.A);
+    right= game.input.keyboard.addKey(Phaser.Keyboard.D);
   }
-
   
 };
 

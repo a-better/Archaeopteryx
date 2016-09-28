@@ -56,24 +56,14 @@
 	function startGame() {
 	    // socket = io("http://localhost:8000");
 
-		game.state.add("Boot", __webpack_require__(11));
-		game.state.add("Preloader", __webpack_require__(12));
-		game.state.add("Level", __webpack_require__(13));
+		game.state.add("Boot", __webpack_require__(1));
+		game.state.add("Preloader", __webpack_require__(2));
+		game.state.add("Level", __webpack_require__(3));
 		game.state.start('Boot');
 	};
 
 /***/ },
-/* 1 */,
-/* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */,
-/* 9 */,
-/* 10 */,
-/* 11 */
+/* 1 */
 /***/ function(module, exports) {
 
 	var Boot = function () {};
@@ -109,7 +99,7 @@
 
 
 /***/ },
-/* 12 */
+/* 2 */
 /***/ function(module, exports) {
 
 	var Preloader = function () {};
@@ -129,14 +119,21 @@
 	    	this.load.onLoadComplete.add(function() {
 	    	    game.state.start("Level", true, false, "train");
 	    	});
+
+	        for (var i = 1; i <= 11; i++)
+	        {
+	            this.load.image('bullet' + i, 'assets/images/bullets/bullet' + i + '.png');
+	        }
+
+	       //  Note: Graphics are not for use in any commercial project
 		}
 	};
 
 /***/ },
-/* 13 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Player = __webpack_require__(14);
+	var Player = __webpack_require__(4);
 	//var RemotePlayer = require("../entities/remoteplayer");
 	var Level = function () {};
 	var test;
@@ -157,8 +154,8 @@
 	  create : function(){
 	  	level = this;
 	  	game.physics.startSystem(Phaser.Physics.ARCADE);
-	    
-	   this.initializeMap();
+
+	    this.initializeMap();
 	  	this.items ={};
 	  	//this.setEventHandlers();
 	  	this.initializePlayers();
@@ -167,7 +164,7 @@
 	    player.body.bounce.set(0.5);
 	   // player.body.setCollisionGroup(playerCollisionGroup);
 	    player.body.fixedRotation = true; 
-	  	cursors =  game.input.keyboard.createCursorKeys();
+	    this.initializationKeyEvent();
 	  },
 
 	  update : function(){
@@ -258,41 +255,56 @@
 	      Object.keys(element.properties).forEach(function(key){
 	        sprite[key] = element.properties[key];
 	      });
+	  },
+	  initializationKeyEvent : function(){
+	    cursors =  game.input.keyboard.createCursorKeys();
+	    shot = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+	    game.input.mouse.capture = true;
+	    up = game.input.keyboard.addKey(Phaser.Keyboard.W);
+	    down = game.input.keyboard.addKey(Phaser.Keyboard.S);
+	    left = game.input.keyboard.addKey(Phaser.Keyboard.A);
+	    right= game.input.keyboard.addKey(Phaser.Keyboard.D);
 	  }
-
 	  
 	};
 
 
 
 /***/ },
-/* 14 */
-/***/ function(module, exports) {
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
 
 	
+	var SingleBullet  = __webpack_require__(6);
+	var Weapon  = __webpack_require__(5);
 	var Player = function(x, y){
 		Phaser.Sprite.call(this, game, x, y, 'frog');
 		this.speed = 250 * scale;
 	    this.anchor.setTo(0.5, 0.5);
 	    this.scale.setTo(scale, scale);
 	    game.add.existing(this);
+	  this.weaponManager = new Weapon(this.game);
+	  this.weapon = this.weaponManager.selectWeapon(1);
 	};
 	Player.prototype = Object.create(Phaser.Sprite.prototype);
 	Player.prototype.constructor = Player;
 
 	Player.prototype.handleInput = function(){
 		this.handleMotionInput();
+	  this.handleMouseInput();
+	  this.handleShotInput();
 	};
 
 	Player.prototype.handleMotionInput = function(){
-	      //console.log('1');
+	      //console.log(this.body.angle);
 	     game.physics.arcade.collide(this, level.foreground);
 
-	    if(cursors.left.isDown){
+	 
+	    if(cursors.left.isDown || left.isDown){
 	      player.body.velocity.x = -this.speed;
 	          //player.animations.play('left');
 	    }
-	    else if(cursors.right.isDown){
+	    else if(cursors.right.isDown || right.isDown){
 	       player.body.velocity.x = this.speed;
 	       //player.animations.play('right');
 	    }
@@ -301,14 +313,193 @@
 	         //player.frame = 4;
 	    }
 
-	    if(cursors.up.isDown){
+	    if(cursors.up.isDown || up.isDown){
 	        player.body.velocity.y = -this.speed;
 	    }
-	    else if(cursors.down.isDown){
+	    else if(cursors.down.isDown || down.isDown){
 	        player.body.velocity.y = this.speed;
 	    }
 	};
+
+	Player.prototype.handleMouseInput = function(){
+	 // console.log( Math.atan2(game.input.activePointer.y - player.y, game.input.activePointer.x - player.x));
+
+	 // console.log(game.input.mousePointer.worldY + '/' + player.y);
+	  this.body.angle = (360 / (2 * Math.PI)) * game.math.angleBetween( player.x, player.y, game.input.activePointer.worldX,game.input.activePointer.worldY);
+	};
+
+	Player.prototype.handleShotInput = function(){
+	      //   
+	  if (shot.isDown)
+	  {  //console.log('1'); 
+	      this.weapon.fire(this);
+	  }
+	  else if(level.input.activePointer.leftButton.isDown){
+	      this.weapon.fire(this);
+	  }     
+	};
+
 	module.exports = Player;
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	var SingleBullet  = __webpack_require__(6);
+	var Beam  = __webpack_require__(8);
+	var Weapon = function(game){
+	    this.weapons = [];
+	    this.singleBullet = new SingleBullet(game);
+	    this.beam = new Beam(game);
+	    this.weapons.push(this.singleBullet);
+	    this.weapons.push(this.beam);
+	    this.currentWeapon = 0;
+	    for (var i = 1; i < this.weapons.length; i++)
+	    {
+	      this.weapons[i].visible = false;
+	    }
+	};
+
+	Weapon.prototype.constructor = Weapon;
+
+	Weapon.prototype.selectWeapon = function(index){
+	    this.weapons[index].visible = true;
+	    return this.weapons[index];
+	};
+
+
+
+	 module.exports = Weapon;
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Bullet  = __webpack_require__(7);
+	SingleBullet = function (game) {
+
+	        Phaser.Group.call(this, game, game.world, 'Single Bullet', false, true, Phaser.Physics.ARCADE);
+
+	        this.nextFire = 0;
+	        this.bulletSpeed = 600;
+	        this.fireRate = 100;
+
+	        for (var i = 0; i < 64; i++)
+	        {
+	            this.add(new Bullet(game, 'bullet5'), true);
+	        }
+
+	        return this;
+
+	    };
+
+	    SingleBullet.prototype = Object.create(Phaser.Group.prototype);
+	    SingleBullet.prototype.constructor = SingleBullet;
+
+	    SingleBullet.prototype.fire = function (source) {
+
+	        if (this.game.time.time < this.nextFire) { return; }
+
+	        var x = source.x + 10;
+	        var y = source.y + 10;
+
+	        this.getFirstExists(false).fire(x, y, source.body.angle, this.bulletSpeed, 0, 0);
+
+	        this.nextFire = this.game.time.time + this.fireRate;
+
+	    };
+
+	    module.exports = SingleBullet;
+
+/***/ },
+/* 7 */
+/***/ function(module, exports) {
+
+	var Bullet = function (game, key){
+			Phaser.Sprite.call(this, game, 0, 0, key);
+
+	        this.texture.baseTexture.scaleMode = PIXI.scaleModes.NEAREST;
+
+	        this.anchor.set(0.5);
+
+	        this.checkWorldBounds = true;
+	        this.outOfBoundsKill = true;
+	        this.exists = false;
+
+	        this.tracking = false;
+	        this.scaleSpeed = 0;
+	};
+
+		Bullet.prototype = Object.create(Phaser.Sprite.prototype);
+		Bullet.prototype.constructor = Bullet;
+		Bullet.prototype.fire = function (x, y, angle, speed, gx, gy) {
+		    this.reset(x, y);
+		    this.scale.set(1);
+		    this.game.physics.arcade.velocityFromAngle(angle, speed, this.body.velocity);
+		    this.angle = angle;
+		    this.body.gravity.set(gx, gy);
+		};
+
+	    Bullet.prototype.update = function () {
+
+	        if (this.tracking)
+	        {
+	            this.rotation = Math.atan2(this.body.velocity.y, this.body.velocity.x);
+	        }
+
+	        if (this.scaleSpeed > 0)
+	        {
+	            this.scale.x += this.scaleSpeed;
+	            this.scale.y += this.scaleSpeed;
+	        }
+
+	    };
+
+	    module.exports = Bullet;
+
+
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Bullet  = __webpack_require__(7);
+
+	Beam = function (game) {
+
+	    Phaser.Group.call(this, game, game.world, 'Beam', false, true, Phaser.Physics.ARCADE);
+
+	    this.nextFire = 0;
+	    this.bulletSpeed = 1000;
+	    this.fireRate = 45;
+
+	    for (var i = 0; i < 64; i++)
+	    {
+	        this.add(new Bullet(game, 'bullet11'), true);
+	    }
+
+	    return this;
+
+	};
+
+	Beam.prototype = Object.create(Phaser.Group.prototype);
+	Beam.prototype.constructor = Beam;
+
+	Beam.prototype.fire = function (source) {
+
+	    if (this.game.time.time < this.nextFire) { return; }
+
+	    var x = source.x + 40;
+	    var y = source.y + 10;
+
+	    this.getFirstExists(false).fire(x, y, source.body.angle, this.bulletSpeed, 0, 0);
+
+	    this.nextFire = this.game.time.time + this.fireRate;
+
+	};
+
+	module.exports = Beam;
 
 /***/ }
 /******/ ]);

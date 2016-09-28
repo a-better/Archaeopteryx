@@ -15,5 +15,12 @@ Preloader.prototype = {
     	this.load.onLoadComplete.add(function() {
     	    game.state.start("Level", true, false, "train");
     	});
+
+        for (var i = 1; i <= 11; i++)
+        {
+            this.load.image('bullet' + i, 'assets/images/bullets/bullet' + i + '.png');
+        }
+
+       //  Note: Graphics are not for use in any commercial project
 	}
 };
