@@ -35,9 +35,19 @@ Room.prototype = {
 		return room.players;
 	},
 	startGame : function(){
-		room.players[room.turn].turn = true;
+		if(room.players[room.turn].turn === 'undefined'){
+			console.log('err ::::platform.server.engine.room.startGame 39: ' +room.players.length);
+			console.log('err ::::platform.server.engine.room.startGame 40: ' + room.turn);
+			room.turn++;
+			if(room.turn >= room.players.length){
+				room.turn = 0;
+			}
+			room.players[room.turn].turn = true;
+		}
+		else{
+			room.players[room.turn].turn = true;
+		}
 		room.answer = '';
-		room.playing = true;
 	},
 	endGame : function(){
 		room.players[room.turn].turn = false;

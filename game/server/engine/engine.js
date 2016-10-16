@@ -26,6 +26,7 @@ Engine.prototype = {
 		room.removeById(id);
 		if(room.players.length < room.minPlayerNum){
 			clearTimeout(room.round);
+			room.endGame();
 			engine.network.broadcastMessage(room.id, 'broadcast_endgame', {answer : room.answer, gameInterval : room.gameInterval});
 			room.playing = false;
 		}
