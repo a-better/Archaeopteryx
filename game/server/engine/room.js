@@ -50,7 +50,13 @@ Room.prototype = {
 		room.answer = '';
 	},
 	endGame : function(){
-		room.players[room.turn].turn = false;
+		if(room.players[room.turn].turn === 'undefined'){
+			console.log('err ::::platform.server.engine.room.startGame 53: ' +room.players.length);
+			console.log('err ::::platform.server.engine.room.startGame 54: ' + room.turn);
+		}
+		else{
+			room.players[room.turn].turn = false;
+		}
 		room.turn++;
 		room.answer = '';
 		if(room.turn >= room.players.length){
