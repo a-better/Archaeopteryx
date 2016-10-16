@@ -1,8 +1,8 @@
 
-window.webServerIp = '172.31.12.3';
+window.webServerIp = '52.78.151.8';
 window.webServerPort = '2000';
 window.gameServerPort = '3000';
-window.gameServerIp = '172.31.12.3';
+window.gameServerIp = '52.78.151.8';
 Kakao.init('d875beadbeaca371a2a21d629017b4f4');
 var Engine = require('./engine/engine');
 var engine = new Engine();
