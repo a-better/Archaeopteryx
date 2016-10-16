@@ -35,7 +35,7 @@ Room.prototype = {
 		return room.players;
 	},
 	startGame : function(){
-		if(room.players[room.turn].turn === 'undefined'){
+		if(room.players[room.turn].turn === undefined){
 			console.log('err ::::platform.server.engine.room.startGame 39: ' +room.players.length);
 			console.log('err ::::platform.server.engine.room.startGame 40: ' + room.turn);
 			room.turn++;
@@ -50,7 +50,7 @@ Room.prototype = {
 		room.answer = '';
 	},
 	endGame : function(){
-		if(room.players[room.turn].turn === 'undefined'){
+		if(room.players[room.turn].turn === undefined){
 			console.log('err ::::platform.server.engine.room.startGame 53: ' +room.players.length);
 			console.log('err ::::platform.server.engine.room.startGame 54: ' + room.turn);
 		}
