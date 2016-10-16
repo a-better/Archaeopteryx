@@ -12,6 +12,7 @@ var Room = function(roomId){
 	this.gameInterval = 5;
 	this.minPlayerNum = 2;
 	this.playing = false;
+	room = this;
 };
 
 Room.prototype.constructor = Room;
@@ -19,35 +20,35 @@ Room.prototype.constructor = Room;
 Room.prototype = {
 	addPlayer : function(id, nickname, thumbnail){
 		var player = new Player(id, nickname, thumbnail);
-		this.players.push(player);
+		room.players.push(player);
 	},
 	addPaint : function(oldX, oldY, x, y, rgba, brushSize){
 	    var paint = new Paint(oldX, oldY, x, y, rgba, brushSize);
-	    this.paints.push(paint); 
+	    room.paints.push(paint); 
 	},
 	removeById : function(id){
-		for(var i = this.players.length - 1; i >= 0; i--) {
-		    if(this.players[i].id === id) {
-		       this.players.splice(i, 1);
+		for(var i = room.players.length - 1; i >= 0; i--) {
+		    if(room.players[i].id === id) {
+		       room.players.splice(i, 1);
 		    }
 		}
-		return this.players;
+		return room.players;
 	},
 	startGame : function(){
-		this.players[this.turn].turn = true;
-		this.answer = '';
-		this.playing = true;
+		room.players[room.turn].turn = true;
+		room.answer = '';
+		room.playing = true;
 	},
 	endGame : function(){
-		this.players[this.turn].turn = false;
-		this.turn++;
-		this.answer = '';
-		if(this.turn >= this.players.length){
-			this.turn = 0;
+		room.players[room.turn].turn = false;
+		room.turn++;
+		room.answer = '';
+		if(room.turn >= room.players.length){
+			room.turn = 0;
 		}
 	},
 	checkAnswer : function(playerId, answer){
-		if(this.answer == answer && this.answer != ''){
+		if(room.answer == answer && room.answer != ''){
 			return true;
 		}
 		else{
@@ -55,18 +56,18 @@ Room.prototype = {
 		}
 	},
 	addScore : function(playerId){
-		for(var i=0; i<this.players.length; i++){
-			if(this.players[i].id == playerId && this.players[i].turn == false){
-				this.players[i].score ++;
+		for(var i=0; i<room.players.length; i++){
+			if(room.players[i].id == playerId && room.players[i].turn == false){
+				room.players[i].score ++;
 				return true;
 			}
 		}
 		return false;
 	},
 	searchPlayerById : function(playerId){
-		for(var i=0; i<this.players.length; i++){
-			if(this.players[i].id == playerId){
-				return this.players[i];
+		for(var i=0; i<room.players.length; i++){
+			if(room.players[i].id == playerId){
+				return room.players[i];
 			}
 		}
 	}	
