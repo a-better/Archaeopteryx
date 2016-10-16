@@ -23,25 +23,38 @@ Engine.prototype = {
 	},
 	removePlayer : function(roomId, id){
 		var room = engine.searchRoomById(roomId);
-		room.removeById(id);
-		if(room.players.length < room.minPlayerNum){
+		if(room.players.length < room.minPlayerNum  && room.playing == true){
 			clearTimeout(room.round);
+			room.paints = [];
+			room.nextPlayer = null;
+			room.turn = 0;
 			room.endGame();
 			engine.network.broadcastMessage(room.id, 'broadcast_endgame', {answer : room.answer, gameInterval : room.gameInterval});
 			room.playing = false;
-		}
+		}		
+		room.removeById(id);
 	},
 	startGame : function(room){
 		room.startGame();
 		var round = setTimeout(
 			function(){
 				room.endGame();
+				room.nextPlayer = null;
 				console.log('gameEnd : roomId'+room.id);
 				engine.network.broadcastMessage(room.id, 'broadcast_endgame',{answer : room.answer, gameInterval : room.gameInterval});
 			}
 			, room.timeout * 1000);
 		engine.rounds[room.id] = round;
-		var player = room.players[room.turn];	
+		var player;
+		if(room.nextPlayer != null)
+		{
+			if(room.searchPlayerById(room.nextPlayer.id)){
+				player = room.nextPlayer;
+			}
+		}
+		else{
+			player = room.players[room.turn];
+		}	
 		engine.network.broadcastMessage(room.id, 'broadcast_startgame', {nickname : player.nickname, timeout : room.timeout});
 		engine.network.sendMessage(player.id, room.id, 'send_turn');
 	},
@@ -61,7 +74,7 @@ Engine.prototype = {
 	},
 	checkAnswer : function(roomId, playerId, answer){
 		var room = engine.searchRoomById(roomId);
-		var player = room.players[room.turn];
+		var player = room.searchPlayerById(playerId);
 		if(room.checkAnswer(playerId, answer)){
 			if(room.addScore(playerId)){
 				engine.endGame(room, player, answer);

@@ -45,9 +45,14 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	window.webServerIp = '52.78.151.8';
+	window.gameServerIp = '52.78.151.8';
 	window.webServerPort = '2000';
 	window.gameServerPort = '3000';
-	window.gameServerIp = '52.78.151.8';
+
+
+	//window.webServerIp = '192.168.0.33';
+	//window.gameServerIp = '192.168.0.33';
+
 	   Kakao.init('d875beadbeaca371a2a21d629017b4f4');
 	   var Engine = __webpack_require__(1);
 	   var engine = new Engine();

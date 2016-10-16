@@ -3,6 +3,7 @@ var Paint = require('./paint');
 var Room = function(roomId){
 	this.id = roomId;
 	this.paints = [];
+	this.nextPlayer = null;
 	this.players = [];
 	this.turn = 0;
 	this.answer = '';
@@ -35,28 +36,11 @@ Room.prototype = {
 		return room.players;
 	},
 	startGame : function(){
-		if(room.players[room.turn].turn === undefined){
-			console.log('err ::::platform.server.engine.room.startGame 39: ' +room.players.length);
-			console.log('err ::::platform.server.engine.room.startGame 40: ' + room.turn);
-			room.turn++;
-			if(room.turn >= room.players.length){
-				room.turn = 0;
-			}
-			room.players[room.turn].turn = true;
-		}
-		else{
-			room.players[room.turn].turn = true;
-		}
+		room.players[room.turn].turn = true;
 		room.answer = '';
 	},
 	endGame : function(){
-		if(room.players[room.turn].turn === undefined){
-			console.log('err ::::platform.server.engine.room.startGame 53: ' +room.players.length);
-			console.log('err ::::platform.server.engine.room.startGame 54: ' + room.turn);
-		}
-		else{
-			room.players[room.turn].turn = false;
-		}
+		room.players[room.turn].turn = false;
 		room.turn++;
 		room.answer = '';
 		if(room.turn >= room.players.length){
@@ -75,6 +59,7 @@ Room.prototype = {
 		for(var i=0; i<room.players.length; i++){
 			if(room.players[i].id == playerId && room.players[i].turn == false){
 				room.players[i].score ++;
+				room.nextPlayer = room.players[i];
 				return true;
 			}
 		}
@@ -86,6 +71,7 @@ Room.prototype = {
 				return room.players[i];
 			}
 		}
+		return false;
 	}	
 };
 
