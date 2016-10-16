@@ -30,7 +30,7 @@ Engine.prototype = {
 			room.playing = false;
 		}
 	},
-	startGame(room){
+	startGame : function(room){
 		room.startGame();
 		var round = setTimeout(
 			function(){
