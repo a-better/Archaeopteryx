@@ -16,14 +16,18 @@ app.set('view engine', 'jade');
 app.set('views', './client');
 app.use(express.static('client'));
 init();
-var webServerIp = '52.78.151.8';
-var gameServerIp = '52.78.151.8';
+var webServerIp = '52.78.184.87';
+var gameServerIp = '52.78.184.87';
 var webServerPort = '2000';
 var gameServerPort = '3000';
 
 
 //var webServerIp = '192.168.0.33';
 //var gameServerIp = '192.168.0.33';;
+
+//var webServerIp = '192.168.43.220';
+//var gameServerIp = '192.168.43.220';
+
 app.get('/:roomId', function(req, res){
 	//console.log(req.params.roomId);
 	//res.send(req.params.roomId);

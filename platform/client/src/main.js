@@ -1,11 +1,16 @@
-window.webServerIp = '52.78.151.8';
-window.gameServerIp = '52.78.151.8';
+window.webServerIp = '52.78.184.87';
+window.gameServerIp = '52.78.184.87';
 window.webServerPort = '2000';
 window.gameServerPort = '3000';
 
 
 //window.webServerIp = '192.168.0.33';
 //window.gameServerIp = '192.168.0.33';
+
+
+
+//window.webServerIp = '192.168.43.220';
+//window.gameServerIp = '192.168.43.220';
 
    Kakao.init('d875beadbeaca371a2a21d629017b4f4');
    var Engine = require('./engine/engine');
@@ -16,7 +21,7 @@ window.gameServerPort = '3000';
    var oldRoomId = null;
    button.onclick = function(){
      engine.network.createRoom();
-     checkRoomId(engine.room);  
+     checkRoomId(engine.room); 
    };
    var checkRoomId = function(room){
       setInterval(function(){

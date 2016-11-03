@@ -44,7 +44,6 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	
 	window.webServerIp = '52.78.184.87';
 	window.gameServerIp = '52.78.184.87';
 	window.webServerPort = '2000';
@@ -59,43 +58,63 @@
 	//window.webServerIp = '192.168.43.220';
 	//window.gameServerIp = '192.168.43.220';
 
-
-	Kakao.init('d875beadbeaca371a2a21d629017b4f4');
-	var Engine = __webpack_require__(1);
-	var engine = new Engine();
-	engine.network.setConnection('GAME');
-	engine.network.setConnection('WEB');
-	$(document).ready(function(){
-	   engine.network.checkRoom();
-	    $('#kakao-login-btn').click(
-	      function(){
-	        Kakao.Auth.login({
-	         success: function(authObj) {
-	      // 로그인 성공시, API를 호출합니다.
-	          Kakao.API.request({
-	              url: '/v1/user/me',
-	              success: function(res) {
-	                redirect(JSON.stringify(res));
-	              },
-	              fail: function(error) {
-	                alert(JSON.stringify(error));
-	              }
-	            });
-	          },
-	         fail: function(err) {
-	            alert(JSON.stringify(err));
+	   Kakao.init('d875beadbeaca371a2a21d629017b4f4');
+	   var Engine = __webpack_require__(1);
+	   var engine = new Engine();
+	   engine.network.setConnection('GAME');
+	   engine.network.setConnection('WEB');
+	   var button = document.getElementById("kakaoLink");
+	   var oldRoomId = null;
+	   button.onclick = function(){
+	     engine.network.createRoom();
+	     checkRoomId(engine.room); 
+	   };
+	   var checkRoomId = function(room){
+	      setInterval(function(){
+	        if(room.id != null){
+	          if(oldRoomId == null){
+	             sendLink(room);
+	              oldRoomId = room.id;
 	          }
-	        });
-	    });
-	 });
-	var redirect = function(data){
-	  var roomId = document.getElementById('roomId').value;
-	  var form = document.login_form;
-	  form.user_data.value = data;
-	  form.action = 'http://'+gameServerIp + ':'+gameServerPort + '/'+roomId;
-	  form.method="post";
-	  form.submit();
-	}
+	          else{
+	             if(oldRoomId != room.id){
+	               sendLink(room);
+	               oldRoomId = room.id;
+	             }
+	          }
+	        }
+
+	      }, 100);
+	   };
+
+	  var sendLink = function(room){
+	      sendKakaoLink(room);
+	      engine.network.registerRoom(room);
+	  };
+	  var sendKakaoLink  = function (room){
+	      var url = 'http://'+webServerIp + ':'+webServerPort + '/'+room.id;
+	      var messenger = 'kakao';
+	      room.setMessenger(messenger);
+	      room.setURL(url);
+	      console.log(url);
+	      Kakao.Link.sendTalkLink({
+	          label: '캐치마인드 같이 하자!',
+	          image: {
+	            src: 'http://'+webServerIp + ':'+webServerPort +'/images/catchmind.jpg',
+	            width: '300',
+	            height: '200'
+	          },
+	          webButton: {
+	            text: '캐치마인드',
+	            url:  url// 앱 설정의 웹 플랫폼에 등록한 도메인의 URL이어야 합니다.
+	          }
+	        }); 
+	   }
+
+
+
+
+
 
 /***/ },
 /* 1 */

@@ -1,1 +1,0 @@
-webpack --watch ./main.js ../dist/app.bundle.js  

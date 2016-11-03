@@ -1,1 +1,0 @@
-webpack --watch ./login.js ../dist/login.bundle.js  
