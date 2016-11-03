@@ -39,9 +39,9 @@ Room.prototype = {
 		this.players[this.turn].turn = true;
 	},
 	endGame : function(){
-		console.log("this.id: 41 line  " + this.id)
-		console.log("this.turn this : 42 line  " + this.turn)
-		console.log("this.players.lenght : this 43 line " + this.players.length);
+		//console.log("this.id: 41 line  " + this.id)
+		//console.log("this.turn this : 42 line  " + this.turn)
+		//console.log("this.players.lenght : this 43 line " + this.players.length);
 		this.players[this.turn].turn = false;
 		this.turn++;
 		if(this.turn >= this.players.length){

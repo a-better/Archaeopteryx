@@ -46,7 +46,7 @@ Network.prototype = {
 			var room = engine.searchRoomById(data.roomId);
 			var index = engine.searchRoomIndexById(data.roomId);	
 			var paint = data.contents;	
-			console.log('network.onSendMessage line 49 ' + index);
+			//console.log('network.onSendMessage line 49 ' + index);
 			rooms[index].addPaint(paint.oldX, paint.oldY, paint.x, paint.y, paint.rgba, paint.brushSize);
 			this.broadcast.to(data.roomId).emit('paint', paint);
 		}
