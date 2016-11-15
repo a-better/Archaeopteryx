@@ -1,27 +1,11 @@
-
-window.webServerIp = '52.78.184.87';
-window.gameServerIp = '52.78.184.87';
-window.webServerPort = '2000';
-window.gameServerPort = '3000';
-
-
-//window.webServerIp = '192.168.0.33';
-//window.gameServerIp = '192.168.0.33';
-
-
-
-//window.webServerIp = '192.168.43.220';
-//window.gameServerIp = '192.168.43.220';
-
-
 Kakao.init('d875beadbeaca371a2a21d629017b4f4');
 var Engine = require('./engine/engine');
 var engine = new Engine();
-engine.network.setConnection('GAME');
-engine.network.setConnection('WEB');
 $(document).ready(function(){
-   engine.network.checkRoom();
-    $('#kakao-login-btn').click(
+  $('#kakao-login-btn').trigger('click');
+});
+
+$('#kakao-login-btn').on('click',
       function(){
         Kakao.Auth.login({
          success: function(authObj) {
@@ -40,13 +24,13 @@ $(document).ready(function(){
             alert(JSON.stringify(err));
           }
         });
-    });
- });
+}); 
+
+
 var redirect = function(data){
-  var roomId = document.getElementById('roomId').value;
   var form = document.login_form;
   form.user_data.value = data;
-  form.action = 'http://'+gameServerIp + ':'+gameServerPort + '/'+roomId;
+  form.action = document.getElementById('url').value;
   form.method="post";
   form.submit();
 }

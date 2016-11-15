@@ -1,39 +1,36 @@
-window.webServerIp = '52.78.184.87';
-window.gameServerIp = '52.78.184.87';
-window.webServerPort = '2000';
-window.gameServerPort = '3000';
-
-
-//window.webServerIp = '192.168.0.33';
-//window.gameServerIp = '192.168.0.33';
-
-
-
-//window.webServerIp = '192.168.43.220';
-//window.gameServerIp = '192.168.43.220';
-
+window.url = 'http://'+document.domain + ':'+location.port + '/';
    Kakao.init('d875beadbeaca371a2a21d629017b4f4');
    var Engine = require('./engine/engine');
-   var engine = new Engine();
-   engine.network.setConnection('GAME');
-   engine.network.setConnection('WEB');
+   var engine = new Engine();             
+   engine.network.addServer('WEB', 'WEB');
    var button = document.getElementById("kakaoLink");
-   var oldRoomId = null;
-   button.onclick = function(){
-     engine.network.createRoom();
-     checkRoomId(engine.room); 
-   };
-   var checkRoomId = function(room){
+   var oldRoomId = '';
+    $('.gamemodal').on("click", function () {
+      engine.room.setGame($(this).data('id'));
+      console.log(engine.room.game);
+      // $('#addBookDialog').modal('show');
+    });
+
+   $('.linkbtn').on('click', function(){
+     var messenger = this.id;
+     engine.room.setMessenger(messenger);
+     console.log(engine.room.messenger);
+     engine.network.webServers['WEB'].createLink();
+     pollRoomChange(); 
+   });
+
+
+   var pollRoomChange = function(){
       setInterval(function(){
-        if(room.id != null){
-          if(oldRoomId == null){
-             sendLink(room);
-              oldRoomId = room.id;
+        if(engine.room.id != ''){
+          if(oldRoomId == ''){
+             sendLink();
+             oldRoomId = engine.room.id;
           }
           else{
-             if(oldRoomId != room.id){
-               sendLink(room);
-               oldRoomId = room.id;
+             if(oldRoomId != engine.room.id){
+               sendLink();
+               oldRoomId = engine.room.id;
              }
           }
         }
@@ -41,26 +38,43 @@ window.gameServerPort = '3000';
       }, 100);
    };
 
-  var sendLink = function(room){
-      sendKakaoLink(room);
-      engine.network.registerRoom(room);
+  var sendLink = function(){
+      var game = engine.room.game;
+      var messenger = engine.room.messenger;
+      var gameInfo = chooseGame(game); 
+      document.getElementById('link').value = engine.room.url;
+      if(messenger == 'kakao'){
+        sendKakaoLink(gameInfo);
+      }     
   };
-  var sendKakaoLink  = function (room){
-      var url = 'http://'+webServerIp + ':'+webServerPort + '/'+room.id;
-      var messenger = 'kakao';
-      room.setMessenger(messenger);
-      room.setURL(url);
-      console.log(url);
+  var chooseGame = function(game){
+    var gameInfo = {'image' : "", 
+      'label' : "",
+      'text'  : ""
+    };
+    if(game == 'catchmind'){
+       gameInfo.image = 'images/catchmind.jpg';
+       gameInfo.label = '캐치마인드';
+       gameInfo.text = '캐치마인드'
+    }
+    else if(game == 'mafia'){
+       gameInfo.image = 'images/mafia.jpg';
+       gameInfo.label = '마피아';
+       gameInfo.text = '마피아'
+    }
+    return gameInfo;
+  }
+  var sendKakaoLink  = function (gameInfo){
       Kakao.Link.sendTalkLink({
-          label: '캐치마인드 같이 하자!',
+          label: gameInfo.label,
           image: {
-            src: 'http://'+webServerIp + ':'+webServerPort +'/images/catchmind.jpg',
+            src: url + gameInfo.image,
             width: '300',
             height: '200'
           },
           webButton: {
-            text: '캐치마인드',
-            url:  url// 앱 설정의 웹 플랫폼에 등록한 도메인의 URL이어야 합니다.
+            text: gameInfo.text,
+            url:  engine.room.url// 앱 설정의 웹 플랫폼에 등록한 도메인의 URL이어야 합니다.
           }
         }); 
    }

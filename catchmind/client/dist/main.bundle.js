@@ -109,7 +109,8 @@
 	window.yourTurn = true;
 	init();
 	function init(){
-			engine.network.setConnection(roomId);
+		engine.network.setConnection(roomId);
+	    engine.network.getSocket().emit('aa');
 		setRoomInfo();
 		Sketch.create({
 	       container: document.getElementById( 'sketch' ),

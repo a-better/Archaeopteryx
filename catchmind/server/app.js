@@ -26,15 +26,24 @@ init();
 app.post('/:roomId', function(req, res){
 	
 	user_data = JSON.parse(req.body.user_data);
+	url = req.body.url;
+	key = req.body.key;
+    roomId = req.params.roomId;
 	console.log(user_data.properties);
 	//console.log()
+	if(!engine.searchRoomById(req.params.roomId)){
+		engine.createRoom(req.params.roomId, key, url);
+	}
 	res.render('room', {roomId : req.params.roomId, 
 		nickname : user_data.properties.nickname,
-		thumbnail : user_data.properties.thumbnail_image
+		thumbnail : user_data.properties.thumbnail_image,
+		url : url,
+		key : key
 	});
 });
 function init() {
 	engine.network.setEventHandlers();
+	engine.network.setEventHandlers2();
 	//engine.socket.setBroadcastingLoop();
 
 	// Start game loop

@@ -11,7 +11,8 @@ html
 	body
 		a(id="kakao-login-btn")
 		a(href="http://alpha-developers.kakao.com/logout")
-		input(type='hidden' id='roomId' value= roomId)
 		form(name= 'login_form')
 			input(type='hidden' name= 'user_data')
-		script(src="/dist/login.bundle.js")
+			input(type='hidden' id='url' value= url)
+			input(type='hidden' id='key' value= key)
+	script(src="/dist/login.bundle.js")

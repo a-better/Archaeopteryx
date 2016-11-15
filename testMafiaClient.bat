@@ -1,0 +1,1 @@
+webpack "mocha\!./test/mafiaClientTest.js" mafia/client/dist/main.bundle.js

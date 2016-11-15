@@ -3,18 +3,17 @@ var Network = require('./network/network');
 //var EventHandler = require('./eventHandler');
 var Engine = function(){
 	this.room = new Room();
-	this.rooms = [];
 	engine = this;
-	this.network = new Network();
+	this.network = new Network(this);
+
 };
 
 Engine.prototype.constructor = Engine;
 
 Engine.prototype = {
-	addRoom : function(){
-	},
-	setRoomId : function(id){
-		this.room.setRoomId(id);
+	setRoom : function(id){
+		this.room.setId(id);
+		this.room.setURL(url + id);
 	}
 }
 

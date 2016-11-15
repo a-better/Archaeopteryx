@@ -1,21 +1,14 @@
-	
-	
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-
     <title>시조새 IO</title>
-
     <!-- Bootstrap Core CSS -->
     <link href="lib/css/bootstrap.min.css" rel="stylesheet">
-
     <!-- Custom CSS -->
     <link href="lib/css/heroic-features.css" rel="stylesheet">
     <link href="lib/css/customicon.css" rel="stylesheet">
@@ -25,11 +18,8 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
 </head>
-
 <body>
-
     <!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
@@ -61,7 +51,6 @@
         </div>
         <!-- /.container -->
     </nav>
-
     <!-- Page Content -->
     <div class="container">
 
@@ -92,7 +81,7 @@
                         <h3>캐치마인드</h3>
                         <p>링크를 공유해서 지금 친구와 캐치마인드를 해보세요!</p>
                         <p>
-                            <a  href="#" class="btn btn-primary" data-toggle="modal" data-target="#link_menu_div">링크 생성</a> <a href="#" class="btn btn-default">More Info</a>
+                            <a  href="#" class="btn btn-primary gamemodal" data-id="catchmind" data-toggle="modal" data-target="#link_menu_div">링크 생성</a> <a href="#" class="btn btn-default">More Info</a>
                         </p>
                     </div>
                 </div>
@@ -105,7 +94,7 @@
                         <h3>마피아(개발중)</h3>
                         <p>수려한 픽셀아트와 함께 마피아 게임을 친구와 즐길수 있습니다!</p>
                         <p>
-                            <a href="#" class="btn btn-primary">링크 생성</a> <a href="#" class="btn btn-default">More Info</a>
+                            <a  href="#" class="btn btn-primary gamemodal" data-id="mafia" data-toggle="modal" data-target="#link_menu_div">링크 생성</a><a href="#" class="btn btn-default">More Info</a>
                         </p>
                     </div>
                 </div>
@@ -138,8 +127,7 @@
         </div>
         <!-- /.row -->
 		<div id="link_menu_div" class="modal fade" role="dialog">
-		  <div class="modal-dialog">
-		
+		  <div class="modal-dialog">	
 		    <!-- Modal content-->
 		    <div class="modal-content">
 		      <div class="modal-header">
@@ -147,11 +135,11 @@
 		        <h4 class="modal-title">메신저 선택</h4>
 		      </div>
 		      <div class="modal-body">
-		        <button type="button"  id="kakaoLink" class="btn btn-secondary btn-block kakao-background white btn-custom"><strong>카카오톡 링크 공유</strong></button>
-		        <button type="button"  id="kakaoLink" class="btn btn-secondary btn-block line-background white btn-custom"><strong>라인 링크 공유(개발중)</strong></button>
-		        <button type="button"  id="kakaoLink" class="btn btn-secondary btn-block telegram-background white btn-custom"><strong>텔레그램링크 공유(개발중)</strong></button>	
-
-		      </div>
+		        <button type="button"  id="kakao" class="btn btn-secondary btn-block kakao-background white btn-custom linkbtn"><strong>카카오톡 링크 공유</strong></button>
+		        <button type="button"  id="line" class="btn btn-secondary btn-block line-background white btn-custom linkbtn"><strong>라인 링크 공유(개발중)</strong></button>
+		        <button type="button"  id="telegram" class="btn btn-secondary btn-block telegram-background white btn-custom linkbtn"><strong>텔레그램링크 공유(개발중)</strong></button>
+		        <textarea class="form-control" id="link" rows="1"></textarea>  
+              </div>
 		      <div class="modal-footer">
 		        <button type="button" id="modal_close_button" class="btn btn-default" data-dismiss="modal">Close</button>
 		      </div>
@@ -160,7 +148,6 @@
 		  </div>
 		</div>
         <hr>
-
         <!-- Footer -->
         <footer>
             <div class="row">
@@ -169,19 +156,14 @@
                 </div>
             </div>
         </footer>
-
     </div>
     <!-- /.container -->
-
     <!-- jQuery -->
     <script src="lib/js/jquery-3.1.1.min.js"></script>
-
     <!-- Bootstrap Core JavaScript -->
     <script src="lib/js/bootstrap.min.js"></script>
 	<script src="https://cdn.socket.io/socket.io-1.3.2.js"></script>
 	<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
     <script src="/dist/main.bundle.js" ></script>
-
 </body>
-
 </html>

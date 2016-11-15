@@ -1,5 +1,6 @@
-var Network = function(){
+var Network = function(engine){
 	network = this;
+	this.engine = engine;
 };
 
 Network.prototype.Constructor = Network;
@@ -11,12 +12,12 @@ Network.prototype = {
 	setEventHandlers: function(){
 		io.on("connection", function(client) {
 			console.log('connected !'+ ':'+ client.id);
-			client.on("register room", network.onRegisterRoom);
+			client.on("create link", network.onCreateLink);
 		});
 	},
-	onRegisterRoom : function(data){
-		console.log('onRegisterRoom : ' + data);
-		engine.urls.push(data);
+	onCreateLink : function(data){
+		var roomId = network.engine.link.createLink(data);
+		io.to(this.id).emit("receive link", {id : roomId});
 	}
 };
 

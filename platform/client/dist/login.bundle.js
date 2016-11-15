@@ -44,30 +44,14 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	
-	window.webServerIp = '52.78.184.87';
-	window.gameServerIp = '52.78.184.87';
-	window.webServerPort = '2000';
-	window.gameServerPort = '3000';
-
-
-	//window.webServerIp = '192.168.0.33';
-	//window.gameServerIp = '192.168.0.33';
-
-
-
-	//window.webServerIp = '192.168.43.220';
-	//window.gameServerIp = '192.168.43.220';
-
-
 	Kakao.init('d875beadbeaca371a2a21d629017b4f4');
 	var Engine = __webpack_require__(1);
 	var engine = new Engine();
-	engine.network.setConnection('GAME');
-	engine.network.setConnection('WEB');
 	$(document).ready(function(){
-	   engine.network.checkRoom();
-	    $('#kakao-login-btn').click(
+	  $('#kakao-login-btn').trigger('click');
+	});
+
+	$('#kakao-login-btn').on('click',
 	      function(){
 	        Kakao.Auth.login({
 	         success: function(authObj) {
@@ -86,13 +70,13 @@
 	            alert(JSON.stringify(err));
 	          }
 	        });
-	    });
-	 });
+	}); 
+
+
 	var redirect = function(data){
-	  var roomId = document.getElementById('roomId').value;
 	  var form = document.login_form;
 	  form.user_data.value = data;
-	  form.action = 'http://'+gameServerIp + ':'+gameServerPort + '/'+roomId;
+	  form.action = document.getElementById('url').value;
 	  form.method="post";
 	  form.submit();
 	}
@@ -106,18 +90,17 @@
 	//var EventHandler = require('./eventHandler');
 	var Engine = function(){
 		this.room = new Room();
-		this.rooms = [];
 		engine = this;
-		this.network = new Network();
+		this.network = new Network(this);
+
 	};
 
 	Engine.prototype.constructor = Engine;
 
 	Engine.prototype = {
-		addRoom : function(){
-		},
-		setRoomId : function(id){
-			this.room.setRoomId(id);
+		setRoom : function(id){
+			this.room.setId(id);
+			this.room.setURL(url + id);
 		}
 	}
 
@@ -129,16 +112,17 @@
 /***/ function(module, exports) {
 
 	var Room = function(){
-		this.id = null;
-		this.url= null;
-		this.messenger = null;
+		this.id = '';
+		this.url= '';
+		this.messenger = '';
+		this.game = '';
 		//this.players = [];
 	};
 
 	Room.prototype.constructor = Room;
 
 	Room.prototype = {
-		setRoomId : function(roomId){
+		setId : function(roomId){
 			this.id = roomId;
 		},
 		setMessenger : function(messenger){
@@ -147,8 +131,8 @@
 		setURL : function(url){
 			this.url = url;
 		},
-		addPlayer : function(){
-			//var player = new Player();
+		setGame : function(game){
+			this.game = game;
 		}
 	};
 
@@ -156,68 +140,66 @@
 
 /***/ },
 /* 3 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	var Network = function(){
+	var WebServer = __webpack_require__(4);
+	var Network = function(engineObj){
 		network = this;
+		this.engine = engineObj;
+		this.webServers = {};
 	};
 
 	Network.prototype.Constructor = Network;
 
 	Network.prototype = {
-		setConnection :function(SERVER){
-			var domain = document.domain;
-			var port = location.port;
-			if(SERVER == 'GAME')
-			{
-				var url = 'http://'+gameServerIp + ':'+gameServerPort;
-				console.log(url);
-				socket = io(url);
+		addServer : function(server, key){
+			if(server == 'WEB'){
+				//console.log(network.engine);
+				webServer = new WebServer(key, network.engine);
 			}
-			else if(SERVER == 'WEB'){
-				var url = 'http://'+webServerIp + ':'+webServerPort;
-				console.log(url);
-				socket_web = io(url);
-			}
-			this.setEventHandlers();
-		},
-		registerRoom : function(room){
-			socket_web.emit('register room', room.url);
-		},
-		getSocket : function(){
-			return socket;
-		},
-		setEventHandlers: function(){
-			socket.on("send room", this.onSendRoom);
-			socket.on("no exist", this.onNoExist);
-			socket.on("exist", this.onExist);
-		},
-		joinRoom : function(){
-			engine.room.setRoomId();
-			socket.emit('add player');
-		},
-		createRoom : function(){
-			console.log('createRoom');
-			socket.emit('create room');
-		},
-		onSendRoom : function(data){
-			console.log(data);
-			engine.setRoomId(data.room.id);
-		},
-		checkRoom : function(){
-			var roomId = document.getElementById('roomId').value;
-			socket.emit("check room", {roomId : roomId});
-		},
-		onNoExist : function(){
-			alert("this room is not available!");
-			location.href = 'http://'+webServerIp + ':'+webServerPort;
-		},
-		onExist : function(){
-			$('#kakao-login-btn').trigger('click');
+			this.webServers[key] = webServer;
 		}
 	};
 
 	module.exports = Network;
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	
+	var WebServer = function(key, engineObj){
+		webServer = this;
+		this.engine = engineObj;
+		this.key = key;
+		this.socket = '';
+		this.setConnection();
+	};
+
+	WebServer.prototype.Constructor = WebServer;
+
+	WebServer.prototype = {
+		setConnection :function(){
+			var domain = document.domain;
+			var port = location.port;
+			var url = "http://"+domain+":"+port;
+			//console.log(webServer.engine);
+			this.socket = io(url);
+			this.setEventHandlers();
+		},
+		setEventHandlers : function(){
+			this.socket.on('receive link', this.onReceiveLink);
+		},
+		createLink : function(){
+			this.socket.emit('create link', {game : engine.room.game});
+		},
+		onReceiveLink : function(data){
+			console.log(data);
+			webServer.engine.setRoom(data.id);
+		}
+	};
+
+	module.exports = WebServer;
 
 /***/ }
 /******/ ]);

@@ -21,6 +21,17 @@ Network.prototype = {
 			//client.on("send data", this.onSendData);
 		});
 	},
+	setEventHandlers2: function(){
+		io.on("connection", function(client) {
+			console.log('connected !'+ ':'+ client.id);
+			client.on("aa", network.aa);
+			//client.on('change turn', network.onChangeTurn);
+			//client.on("send data", this.onSendData);
+		});
+	},
+	aa : function(){
+		console.log('aa');
+	},
 	onCreateRoom : function(data){
 		engine.createRoom(roomId);
 		network.sendRoomById(this.id, roomId);

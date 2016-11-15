@@ -1,7 +1,9 @@
 var Player = require('./player');
 var Paint = require('./paint');
-var Room = function(thisId){
+var Room = function(thisId, linkKey, url){
 	this.id = thisId;
+	this.linkKey = linkKey;
+	this.url = url;
 	this.paints = [];
 	this.nextPlayer = null;
 	this.players = [];

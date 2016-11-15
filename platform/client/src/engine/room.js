@@ -1,14 +1,15 @@
 var Room = function(){
-	this.id = null;
-	this.url= null;
-	this.messenger = null;
+	this.id = '';
+	this.url= '';
+	this.messenger = '';
+	this.game = '';
 	//this.players = [];
 };
 
 Room.prototype.constructor = Room;
 
 Room.prototype = {
-	setRoomId : function(roomId){
+	setId : function(roomId){
 		this.id = roomId;
 	},
 	setMessenger : function(messenger){
@@ -17,8 +18,8 @@ Room.prototype = {
 	setURL : function(url){
 		this.url = url;
 	},
-	addPlayer : function(){
-		//var player = new Player();
+	setGame : function(game){
+		this.game = game;
 	}
 };
 
