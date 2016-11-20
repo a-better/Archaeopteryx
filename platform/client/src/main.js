@@ -80,7 +80,3 @@ window.url = 'http://'+document.domain + ':'+location.port + '/';
           }
         }); 
    }
-
-
-
-

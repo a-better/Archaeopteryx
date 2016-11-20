@@ -20,9 +20,9 @@ $('#kakao-login-btn').on('click',
                 redirect(JSON.stringify(res));
                 alert(res);
 
-                $.ajax({url: url+'/userId/'+},success:function(){
+                $.ajax({url: url+'/userId/',success:function(){
                   alert('user access success');
-                })
+                }});
               },
               fail: function(error) {
                 alert(JSON.stringify(error));
