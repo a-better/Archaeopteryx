@@ -1,3 +1,5 @@
+//index.html
+
 window.url = 'http://'+document.domain + ':'+location.port + '/';
    Kakao.init('d875beadbeaca371a2a21d629017b4f4');
    var Engine = require('./engine/engine');

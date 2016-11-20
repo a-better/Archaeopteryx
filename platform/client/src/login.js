@@ -5,6 +5,10 @@ $(document).ready(function(){
   $('#kakao-login-btn').trigger('click');
 });
 
+var domain = document.domain;
+var port = location.port;
+var url = "http://"+domain+":"+port;
+
 $('#kakao-login-btn').on('click',
       function(){
         Kakao.Auth.login({
@@ -14,6 +18,11 @@ $('#kakao-login-btn').on('click',
               url: '/v1/user/me',
               success: function(res) {
                 redirect(JSON.stringify(res));
+                alert(res);
+
+                $.ajax({url: url+'/userId/'+},success:function(){
+                  alert('user access success');
+                })
               },
               fail: function(error) {
                 alert(JSON.stringify(error));
