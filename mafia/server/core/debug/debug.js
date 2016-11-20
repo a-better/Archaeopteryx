@@ -1,11 +1,11 @@
-var Debug = function(){
-	this.debugMode = true;
-	this.useAlert = false;
+var Debug = function(config){
+	this.debugMode = true && config.debug;
+	this.useAlert = false || config.alert;
 }
 
 Debug.prototype.constructor = Debug;
 
-Debug.prototype.Log = function(type, msg){
+Debug.prototype.log = function(type, msg){
 	if(this.debugMode == false)
 		return;
 	if(typeof console == "undefined")

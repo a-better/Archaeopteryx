@@ -7,11 +7,22 @@ var StateFactory = function(){
 StateFactory.prototype.constructor = StateFactory;
 
 StateFactory.prototype = {
-	idle : function(){
-		return new Idle();
+	idle : function(key){
+		if(typeof key === "undefined"){
+			return new Idle();
+		}
+		else{
+			return new Idle(key);
+		}
+		
 	},
-	playing : function(){
-		return new Playing();
+	playing : function(key){
+		if(typeof key === "undefined"){
+			return new Playing();
+		}
+		else{
+			return new Playing(key);
+		}
 	}
 }
 

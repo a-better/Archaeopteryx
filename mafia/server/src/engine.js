@@ -1,6 +1,12 @@
 var MafiaRoomManager = require('./room/mafiaRoomManager');
+var Network = require('./network/network');
 var Engine = function(){
+	this.network = new Network();
 	this.roomManager = new MafiaRoomManager();
+
+	this.roomManager.setNetwork(this.network);
+	this.network.setRoomManaber(this.roomManager);
+
 }
 
 Engine.prototype.constructor = Engine;

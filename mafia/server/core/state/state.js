@@ -1,5 +1,10 @@
-var State = function(){
-	this.key = '';
+var State = function(key){
+	if(typeof key === "undefined"){
+		this.key = '';
+	}
+	else{
+		this.key = key;
+	}
 }
 
 State.prototype.constructor = State;
