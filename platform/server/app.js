@@ -52,7 +52,7 @@ init();
 app.post('/userId/',function(req,res){
 	//res.writeHead(200,{"Content-Type":"text/plain"});
 
-	var user_data=req.body.user_data;
+	var user_data=JSON.parse(req.body.user_data);
 	console.log("user_data: "+user_data);
 
 
