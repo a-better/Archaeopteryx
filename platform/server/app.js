@@ -57,8 +57,13 @@ app.post('/userId/',function(req,res){
 
 	console.log("json object:"+user_data.id+" "+user_data.properties.nickname);
 
-	var query = connection.query('insert into user ('user_id', 'user_name', 'thumbnail_image')\
-	 VALUES('user_data.id','user_data.properties.nickname' , 'user_data.properties.thumbnail_image');');
+	var user_query= { user_id: 'user_data.id', user_name: 'user_data.properties.nickname',\
+	thumbnail_image: 'user_data.properties.thumbnail_image'}
+	var query = connection.query('INSERT INTO user SET ?', user_query, function(err,res){
+		if(err) throw err;
+
+		console.log('last insert ID:',res.insertId);
+	});
 })
 
 //db end
