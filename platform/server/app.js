@@ -49,9 +49,10 @@ app.set('views', './client');
 app.use(express.static('client'));
 init();
 
-app.post('/userId',function(req,res){
+app.post('/userId/',function(req,res){
+	//res.writeHead(200,{"Content-Type":"text/plain"});
 
-	user_data=req.body;
+	var user_data=req.body.user_data;
 	console.log("user_data: "+user_data);
 
 })

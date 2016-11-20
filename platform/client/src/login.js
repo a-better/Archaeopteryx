@@ -22,7 +22,7 @@ $('#kakao-login-btn').on('click',
                 //user data rest api send
                 //ajax run when use get, post
                 console.log(parsing_res);
-                $.post({url: url+'/userId/',{'user_data' : parsing_res}, success:function(){
+                $.ajax({url: url+'/userId/',dataType:'json',type:'POST',data:{'user_data':parsing_res}, success:function(){
                   alert('user access success');
                 }});
               },
