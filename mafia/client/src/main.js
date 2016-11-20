@@ -1,5 +1,9 @@
-var Test = require('./test/test');
+var RoomManager = require('./gamelogic/roomManager');
+var button = require('./ui/button');
+var chat = require('./ui/chat');
 
-var test = new Test();
+var roomManager = new RoomManager();
+
+var uiManager = new UIManager();
 
 

@@ -1,9 +1,8 @@
 var State = require('../state');
 var StateManager = require('../stateManager');
-var Playing = function(){
-	State.call(this);
+var Playing = function(key){
+	State.call(this, key);
 	this.playing = true;
-	this.stateManager = new StateManager();
 }
 
 Playing.prototype.contructor = Object.create(State.prototype);

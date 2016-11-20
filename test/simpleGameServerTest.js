@@ -2,7 +2,7 @@ var expect    = require("chai").expect;
 var Mafia = require("../mafia/server/src/engine");
 
 describe("Simple Game Server", function() {
-	this.timeout(5000);
+	this.timeout(2000);
   	var mafia;
   describe("Join Room", function() {
    	before("create game server", function(){

@@ -1,19 +1,14 @@
-var Day = function(){
-	this.vote = true;
+var Playing = require('../../../core/state/room_state/playing');
+var Day = function(id){
+	Playing.call(this, id);
+	this.count = 0;
 	this.chatCitizen = true;
-	this.chatMafia = true;
+	this.chatMafia = false;
 	this.enableKill = false;
+	this.enableDetect = false;
+	this.enableVote = true;
 }
 Day.prototype.constructor = Day;
-Day.prototype = Object.create(State.prototype);
+Day.prototype = Object.create(Playing.prototype);
 
-Day.prototype.vote = function(){
-
-}
-Day.prototype.chat = function(){
-
-}
-
-Day.prototype.kill = function(){
-	return enableKill;
-}
+module.exports  = Day;

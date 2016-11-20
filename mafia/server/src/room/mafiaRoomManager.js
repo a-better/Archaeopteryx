@@ -1,21 +1,28 @@
 var GameObjectManager = require('../../core/objects/gameObjectManager');
-var GameObjectFactory = require('../../core/objects/gameObjectFactory');
-var StateFactory = require('../../core/state/stateFactory');
+var MafiaObjectFactory = require('../factory/mafiaObjectFactory');
+var StateFactory = require('../factory/mafiaStateFactory');
+
 var MafiaRoomManager = function(){
    GameObjectManager.call(this);
-   this.gameObjectFactory = new GameObjectFactory();
-   this.stateFactory = new StateFactory();
+   this.gameObjectFactory = new MafiaObjectFactory();
+   this.stateFactory = new StateFactory({'day':'day', 'night' : 'night'});
+   this.network;
 }
 
 MafiaRoomManager.prototype.constructor = MafiaRoomManager;
 MafiaRoomManager.prototype = Object.create(GameObjectManager.prototype);
 
-MafiaRoomManager.prototype.create = function(id, key, object){
-	var room = this.gameObjectFactory.room(id, key, object);
+MafiaRoomManager.prototype.setNetwork = function(network){
+	this.network = network;
+}
+
+MafiaRoomManager.prototype.create = function(id, max, min, platformServerId, url){
+	var room = this.gameObjectFactory.mafiaRoom(id, max, min, platformServerId, url);
 	return room;
 }
 MafiaRoomManager.prototype.set = function(key){
 	this.objects[key].setState(this.stateFactory);
+	this.objects[key].setNetwork(this.network);
 }
 MafiaRoomManager.prototype.join = function(key, id, nickname, thumbnail){
 	this.objects[key].join(id, nickname, thumbnail);
@@ -25,11 +32,20 @@ MafiaRoomManager.prototype.leave = function(key, id){
 }
 MafiaRoomManager.prototype.startGame = function(key){
 	var room = this.objects[key];
-	room.start();
+	room.start(room);
 }
 MafiaRoomManager.prototype.endGame = function(key){
 	var room = this.objects[key];
 	room.end();
 }
 
+MafiaRoomManager.prototype.isPlaying = function(key){
+	var room = this.objects[key];
+	if(room.isPlaying()){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
 module.exports = MafiaRoomManager;

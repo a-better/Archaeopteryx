@@ -1,6 +1,6 @@
 var StateManager = function(){
 	this.states = {}; 
-	this.key = '';
+	this.current = '';
 }
 StateManager.prototype.constructor = StateManager;
 
