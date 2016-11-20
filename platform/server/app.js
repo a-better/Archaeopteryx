@@ -12,7 +12,7 @@ var connection = mysql.createConnection({
 	host :'localhost',	//db ip address
 	port : 3306,	// db port number
 	user : 'arachne',	// db id
-	password : '1234'	// db password
+	password : '1234',	// db password
 	database : 'platform'	//db schema name
 });
 
