@@ -3,6 +3,9 @@
 //최초로 진입하는 애플리케이션 
 var express = require('express');
 var Engine = require('./engine/engine');
+
+//express req body change
+var bodyParser = require('body-parser');
 var app		= express();
 
 app.use(bodyParser.urlencoded({extended: false}));
