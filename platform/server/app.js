@@ -55,10 +55,13 @@ app.post('/userId/',function(req,res){
 	var user_data=req.body.user_data;
 	console.log("user_data: "+user_data);
 
+	var query = connection.query('insert into user (user_id, user_name, thumbnail_image)
+	\ VALUES(user_data.id, user_data.properties.nickname,
+	\ user_data.properties.thumbnail_image)');
 })
 
 //db end
-connection.end();
+//connection.end();
 
 app.get('/:roomId', function(req, res){
 	//console.log(req.params.roomId);
