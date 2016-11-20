@@ -58,7 +58,7 @@ app.post('/userId/',function(req,res){
 	console.log("json object:"+user_data.id+" "+user_data.properties.nickname);
 
 	var query = connection.query('insert into user (user_id, user_name, thumbnail_image)\
-	 VALUES('+user_data.id+', nickname, thumbnail_image)');
+	 VALUES('+user_data.id+','+user_data.properties.nickname+' , '+user_data.properties.thumbnail_image+')');
 })
 
 //db end
