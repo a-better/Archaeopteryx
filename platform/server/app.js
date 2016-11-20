@@ -52,7 +52,7 @@ init();
 app.post('/userId',function(req,res){
 
 	user_data=req.body;
-	console.log("user_data"+user_data);
+	console.log("user_data: "+user_data);
 
 })
 
