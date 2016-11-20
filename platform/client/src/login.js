@@ -21,6 +21,7 @@ $('#kakao-login-btn').on('click',
                 redirect(parsing_res);
                 //user data rest api send
                 //ajax run when use get, post
+                console.log(parsing_res);
                 $.post({url: url+'/userId/',parsing_res, success:function(){
                   alert('user access success');
                 }});
