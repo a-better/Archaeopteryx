@@ -31,8 +31,6 @@ connection.connect(function(err){
 
 
 
-
-
 var port = '2000';
 var ip = '';
 require('dns').lookup(require('os').hostname(), function (err, add, fam) {
@@ -54,7 +52,7 @@ init();
 app.post('/userId',function(req,res){
 
 	user_data=req.body;
-	console.log(user_data);
+	console.log("user_data"+user_data);
 
 })
 
