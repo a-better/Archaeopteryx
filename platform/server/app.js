@@ -5,6 +5,8 @@ var express = require('express');
 var Engine = require('./engine/engine');
 var app		= express();
 
+app.use(bodyParser.urlencoded({extended: false}));
+
 //npm read mysql
 var mysql = require('mysql');
 
@@ -26,8 +28,7 @@ connection.connect(function(err){
 
 
 
-//db end
-connection.end();
+
 
 var port = '2000';
 var ip = '';
@@ -47,6 +48,15 @@ app.set('views', './client');
 app.use(express.static('client'));
 init();
 
+app.post('/userId',function(req,res){
+
+	user_data=req.body;
+	console.log(user_data);
+
+})
+
+//db end
+connection.end();
 
 app.get('/:roomId', function(req, res){
 	//console.log(req.params.roomId);

@@ -18,9 +18,8 @@ $('#kakao-login-btn').on('click',
               url: '/v1/user/me',
               success: function(res) {
                 redirect(JSON.stringify(res));
-                console.log(res);
-
-                $.ajax({url: url+'/userId/',success:function(){
+                //user data rest api send
+                $.ajax({url: url+'/userId/',res, success:function(){
                   alert('user access success');
                 }});
               },
