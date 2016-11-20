@@ -4,6 +4,31 @@
 var express = require('express');
 var Engine = require('./engine/engine');
 var app		= express();
+
+//npm read mysql
+var mysql = require('mysql');
+
+var connection = mysql.createConnection({
+	host :'localhost',	//db ip address
+	port : 3306,	// db port number
+	user : 'arachne',	// db id
+	password : '1234'	// db password
+	database : 'platform'	//db schema name
+});
+
+connection.connect(function(err){
+	if(err){
+		console.error('mysql connection error');
+		console.error(err);
+		throw err;
+	}
+});
+
+
+
+//db end
+connection.end();
+
 var port = '2000';
 var ip = '';
 require('dns').lookup(require('os').hostname(), function (err, add, fam) {
@@ -16,6 +41,7 @@ var engine = new Engine();
 engine.network.setConnection(server);
 
 app.locals.pretty = true;
+//view engine => jade
 app.set('view engine', 'jade');
 app.set('views', './client');
 app.use(express.static('client'));
@@ -34,6 +60,7 @@ app.get('/:roomId', function(req, res){
 	}
 	else{
 		console.log(url);
+		//render jade => html
 		res.render('login', {key : req.params.roomId, url : url});
 	}
 });
