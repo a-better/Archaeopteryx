@@ -3,7 +3,12 @@
 //최초로 진입하는 애플리케이션 
 var express = require('express');
 var Engine = require('./engine/engine');
+
+//express req body change
+var bodyParser = require('body-parser');
 var app		= express();
+
+app.use(bodyParser.urlencoded({extended: false}));
 
 //npm read mysql
 var mysql = require('mysql');
@@ -26,9 +31,6 @@ connection.connect(function(err){
 
 
 
-//db end
-connection.end();
-
 var port = '2000';
 var ip = '';
 require('dns').lookup(require('os').hostname(), function (err, add, fam) {
@@ -47,6 +49,25 @@ app.set('views', './client');
 app.use(express.static('client'));
 init();
 
+app.post('/userId/',function(req,res){
+	//res.writeHead(200,{"Content-Type":"text/plain"});
+
+	var user_data=JSON.parse(req.body.user_data);
+	console.log("user_data: "+req.body.user_data);
+
+	console.log("json object:"+user_data.id+" "+user_data.properties.nickname);
+
+	var user_query= { user_id: user_data.id, user_name: user_data.properties.nickname,
+	thumbnail_image: user_data.properties.thumbnail_image};
+	var query = connection.query('INSERT INTO user SET ?', user_query, function(err,res){
+		if(err) throw err;
+
+		console.log('last insert ID:',res.insertId);
+	});
+})
+
+//db end
+//connection.end();
 
 app.get('/:roomId', function(req, res){
 	//console.log(req.params.roomId);

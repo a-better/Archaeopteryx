@@ -17,12 +17,14 @@ $('#kakao-login-btn').on('click',
           Kakao.API.request({
               url: '/v1/user/me',
               success: function(res) {
-                redirect(JSON.stringify(res));
-                alert(res);
-
-                $.ajax(url: url+'/userId/',success:function(){
+                var parsing_res = JSON.stringify(res);
+                redirect(parsing_res);
+                //user data rest api send
+                //ajax run when use get, post
+                console.log(parsing_res);
+                $.ajax({url: url+'/userId/',dataType:'json',type:'POST',data:{'user_data':parsing_res}, success:function(){
                   alert('user access success');
-                })
+                }});
               },
               fail: function(error) {
                 alert(JSON.stringify(error));
