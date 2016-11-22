@@ -15,6 +15,8 @@ var Citizen = function(id){
 	this.skillTo = '';
 	this.voteTo = '';
 	this.vote = 0;
+
+	this.agreed = 0;
 }
 
 Citizen.prototype.constructor = Citizen;
@@ -28,6 +30,7 @@ Citizen.prototype.reset = function(){
 	this.enableSkill = true;
 	this.save = false;
 	this.avoidKill = false;
+	this.agreed = 0;
 }
 
 Citizen.prototype.voted = function(){
@@ -57,6 +60,14 @@ Citizen.prototype.setSkillTarget = function(actorId){
 	if(this.haveSkill == true && this.dead == false && this.enableSkill == true){
 		this.skillTo = actorId;	
 	}
+}
+
+Citizen.prototype.agree = function(){
+	this.agreed = 1;
+}
+
+Citizen.prototype.disagree = function(){
+	this.agreed = -1;
 }
 
 module.exports = Citizen;

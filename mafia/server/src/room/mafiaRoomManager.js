@@ -48,4 +48,12 @@ MafiaRoomManager.prototype.isPlaying = function(key){
 		return false;
 	}
 }
+MafiaRoomManager.prototype.haveRoom = function(key){
+	if(this.objects[key]){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
 module.exports = MafiaRoomManager;

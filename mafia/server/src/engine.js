@@ -5,7 +5,8 @@ var Engine = function(){
 	this.roomManager = new MafiaRoomManager();
 
 	this.roomManager.setNetwork(this.network);
-	this.network.setRoomManaber(this.roomManager);
+	console.log(this.roomManager);
+	this.network.setRoomManager(this.roomManager);
 
 }
 

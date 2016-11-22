@@ -1,5 +1,6 @@
 var Day = require('../room_state/playing/day');
 var Night = require('../room_state/playing/night');
+var LastSpeech = require('../room_state/playing/lastSpeech');
 
 var Citizen = require('../actor_state/citizen/citizen');
 var Doctor = require('../actor_state/citizen/special/doctor');
@@ -23,6 +24,8 @@ var MafiaStateFactory = function(data){
 
 	this.dayId = data.day || 'day';
 	this.nightId = data.night || 'night';
+	this.lastSpeechId = data.lastSpeech || 'lastSpeech';
+
 	this.data = {'debug' : false , 'alert' : false};
 	this.debug = new Debug({'debug' : false , 'alert' : false});
 }
@@ -39,6 +42,9 @@ MafiaStateFactory.prototype.roomState = function(key){
 			break;
 		case this.nightId:
 			return new Night(key);
+			break;
+		case this.lastSpeechId:
+			return new LastSpeech(key);
 			break;	
 	}
 }

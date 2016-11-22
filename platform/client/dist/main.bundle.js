@@ -44,6 +44,8 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
+	//index.html
+
 	window.url = 'http://'+document.domain + ':'+location.port + '/';
 	   Kakao.init('d875beadbeaca371a2a21d629017b4f4');
 	   var Engine = __webpack_require__(1);

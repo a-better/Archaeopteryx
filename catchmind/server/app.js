@@ -23,6 +23,7 @@ app.set('views', './client');
 //client->lndex.html
 app.use(express.static('client'));
 init();
+
 app.post('/:roomId', function(req, res){
 	
 	user_data = JSON.parse(req.body.user_data);

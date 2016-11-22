@@ -7,6 +7,8 @@ var Day = function(id){
 	this.enableKill = false;
 	this.enableDetect = false;
 	this.enableVote = true;
+
+	this.time = 5;
 }
 Day.prototype.constructor = Day;
 Day.prototype = Object.create(Playing.prototype);

@@ -9,7 +9,7 @@ var MafiaActorManager = function(){
 	this.policeNum = 1;
 	this.doctorNum = 1;
 	this.spyNum = 1;
-	this.soldierNum = 1;
+	this.soldierNum =1;
 
 	this.mafiaStateId = 'mafia';
 	this.policeStateId = 'police';
@@ -45,6 +45,7 @@ MafiaActorManager.prototype.reset = function(){
 MafiaActorManager.prototype.add = function(id, nickname, thumbnail){
 	var actor =  new MafiaActor(id, nickname, thumbnail);
 	this.objects[id] = actor;
+	this.objects[id].setJob(this.mafiaStateFactory.actorState(this.citizenStateId));
 }
 
 MafiaActorManager.prototype.setActorState = function(min){
@@ -146,8 +147,14 @@ MafiaActorManager.prototype.killCitizen = function(){
 	}
 }
 MafiaActorManager.prototype.killVotedCitizen = function(target){
-	this.objects[target].state.dead = true;
-	return true;
+	var judgeResult = this.getCurrentCandidateJudge();
+	if(judgeResult.agree > judgeResult.disagree){
+		this.objects[target].state.dead = true;
+		return true;		
+	}
+	else{
+		return false;
+	}
 }
 
 MafiaActorManager.prototype.isSoldier = function(actor){
@@ -245,6 +252,17 @@ MafiaActorManager.prototype.getMafiaActors = function(){
 	}
 	return array;
 }
+MafiaActorManager.prototype.getMafiaAndSpy = function(){
+	var mafias = this.getActorByState('mafia');
+	var spys = this.getActorByState('spy'); 
+	for(var i=0; i<spys.length; i++){
+		this.debug.log("LOG", 'mafiaActorManager 253 : '+spys[i].id + this.objects[spys[i]]);
+		if(this.objects[spys[i].id].state.contacted == true){
+			mafias.push(spys[i]);
+		}
+	} 
+	return mafias;
+}
 MafiaActorManager.prototype.getLiveActors = function(){
 	var array = [];
 	for(key in this.objects){
@@ -255,6 +273,42 @@ MafiaActorManager.prototype.getLiveActors = function(){
 	return array;
 }
 
+MafiaActorManager.prototype.getDeadActors = function(){
+	var array = [];
+	for(key in this.objects){
+		if(this.objects[key].state.dead){
+			array.push(this.objects[key]);
+		}
+	}
+	return array;
+}
 
+MafiaActorManager.prototype.getNickname = function(actorId){
+	this.debug.log("LOG", actorId + this.objects[actorId]);
+	return this.objects[actorId].nickname;
+}
+
+MafiaActorManager.prototype.setAgreeToCandidateJudge = function(actorId){
+	this.objects[actorId].state.agree();
+}
+
+MafiaActorManager.prototype.setDisagreeToCandidateJudge = function(actorId){
+	this.objects[actorId].state.disagree();
+}
+
+MafiaActorManager.prototype.getCurrentCandidateJudge = function(){
+	var agree = 0;
+	var disagree = 0;
+	var liveActors = this.getLiveActors();
+	for(var i=0; i < liveActors.length; i++){
+		if(this.objects[liveActors[i].id].state.agreed == -1){
+			disagree++;
+		}
+		else if(this.objects[liveActors[i].id].state.agreed == 1){
+			agree++;
+		}
+	}
+	return {'agree' : agree, 'disagree' : disagree};	
+}
 
 module.exports = MafiaActorManager;
