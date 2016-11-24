@@ -11,6 +11,7 @@ var app		= express();
 app.use(bodyParser.urlencoded({extended: false}));
 
 //npm read mysql
+/*
 var mysql = require('mysql');
 
 var connection = mysql.createConnection({
@@ -28,7 +29,7 @@ connection.connect(function(err){
 		throw err;
 	}
 });
-
+*/
 
 
 var port = '2000';
@@ -57,13 +58,14 @@ app.post('/userId/',function(req,res){
 
 	console.log("json object:"+user_data.id+" "+user_data.properties.nickname);
 
-	var user_query= { user_id: user_data.id, user_name: user_data.properties.nickname,
-	thumbnail_image: user_data.properties.thumbnail_image};
-	var query = connection.query('INSERT INTO user SET ?', user_query, function(err,res){
-		if(err) throw err;
+	//mysql
+	//var user_query= { user_id: user_data.id, user_name: user_data.properties.nickname,
+	//thumbnail_image: user_data.properties.thumbnail_image};
+	//var query = connection.query('INSERT INTO user SET ?', user_query, function(err,res){
+	//	if(err) throw err;
 
-		console.log('last insert ID:',res.insertId);
-	});
+	//	console.log('last insert ID:',res.insertId);
+	//});
 })
 
 //db end
