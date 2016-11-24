@@ -8,6 +8,7 @@ Network.prototype.Constructor = Network;
 Network.prototype = {
 	setConnection : function(server){
 		io = require("socket.io").listen(server);
+		console.log("listen catchmind");
 	},
 	setEventHandlers: function(){
 		io.on("connection", function(client) {
