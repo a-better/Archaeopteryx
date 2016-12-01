@@ -1,4 +1,10 @@
 
+var AWS = require('aws-sdk');
+
+var cloudwatch = new AWS.CloudWatch();
+
+
+
 //엔트리 애플리케이션 
 //최초로 진입하는 애플리케이션 
 var express = require('express');

@@ -38,6 +38,8 @@ $('#kakao-login-btn').on('click',
 }); 
 
 
+
+
 var redirect = function(data){
   var form = document.login_form;
   form.user_data.value = data;

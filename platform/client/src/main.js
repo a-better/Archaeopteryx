@@ -1,6 +1,7 @@
 //index.html
 
 window.url = 'http://'+document.domain + ':'+location.port + '/';
+   //kakao init can use kakao api
    Kakao.init('d875beadbeaca371a2a21d629017b4f4');
    var Engine = require('./engine/engine');
    var engine = new Engine();             
@@ -45,9 +46,7 @@ window.url = 'http://'+document.domain + ':'+location.port + '/';
       var messenger = engine.room.messenger;
       var gameInfo = chooseGame(game); 
       document.getElementById('link').value = engine.room.url;
-      if(messenger == 'kakao'){
-        sendKakaoLink(gameInfo);
-      }     
+      sendLink(gameInfo,messenger);
   };
   var chooseGame = function(game){
     var gameInfo = {'image' : "", 
@@ -66,7 +65,9 @@ window.url = 'http://'+document.domain + ':'+location.port + '/';
     }
     return gameInfo;
   }
-  var sendKakaoLink  = function (gameInfo){
+  var sendKakaoLink  = function (gameInfo,messenger){
+    if(messenger == 'kakao')
+    {
       Kakao.Link.sendTalkLink({
           label: gameInfo.label,
           image: {
@@ -79,4 +80,9 @@ window.url = 'http://'+document.domain + ':'+location.port + '/';
             url:  engine.room.url// 앱 설정의 웹 플랫폼에 등록한 도메인의 URL이어야 합니다.
           }
         }); 
+    }
+    else if(messenger == 'telegram')
+    {
+
+    } 
    }
